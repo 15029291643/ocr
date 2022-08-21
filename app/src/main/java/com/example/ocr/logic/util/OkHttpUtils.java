@@ -52,6 +52,7 @@ public class OkHttpUtils {
                 + ACCESS_KEY
                 + "&accessSecret="
                 + ACCESS_SECRET;
+        Log.e(TAG, "getAccessToken: " + url);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
