@@ -5,12 +5,10 @@ import android.content.Context;
 import com.example.ocr.logic.dao.InvoiceService;
 import com.example.ocr.logic.model.InvoiceData;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import cn.hutool.core.codec.Base64;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -23,14 +21,14 @@ public class RetrofitUtils {
     }
 
     private final Retrofit RETROFIT = new Retrofit.Builder()
-            .baseUrl(StringUtils.BASE_URL)
+            .baseUrl(DataUtils.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
     private final InvoiceService mInvoiceService = RETROFIT.create(InvoiceService.class);
 
     private List<InvoiceData> _getInvoice(String base64) throws IOException {
-        return mInvoiceService.getInvoice(StringUtils.ACCESS_TOKEN, base64).execute().body().getData();
+        return mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, base64).execute().body().getData();
     }
 
     // inputStream -> List<InvoiceData>
@@ -40,7 +38,7 @@ public class RetrofitUtils {
 
     // 必须在所有网络请求之前
     public void getToken() throws IOException {
-        StringUtils.ACCESS_TOKEN = mInvoiceService.getToken().execute().body().getData().getAccess_token();
+        DataUtils.ACCESS_TOKEN = mInvoiceService.getToken().execute().body().getData().getAccess_token();
     }
 
 }

@@ -40,4 +40,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     // hutool
     implementation 'cn.hutool:hutool-all:5.8.5'
+    // excelpoi
+    implementation 'cn.afterturn:easypoi-base:3.2.0', {
+        exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
+    }
+    // 依赖冲突
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 }
