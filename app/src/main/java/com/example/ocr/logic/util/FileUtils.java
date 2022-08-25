@@ -11,34 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+// 文件工具类
 public class FileUtils {
     private static final AssetManager ASSET_MANAGER = MainActivity.getContext().getResources().getAssets();
     private static final String TAG = "FileUtils";
 
-    public static String fileToString(String fileName) {
-        BufferedReader bufferedReader = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(ASSET_MANAGER.open("txt_base64.txt")));
-            String readLine;
-            while ((readLine = bufferedReader.readLine()) != null) {
-                stringBuilder.append(readLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-
+    // 文件名转byte数组
     public static byte[] fileToByteArray(String fileName) {
         InputStream inputStream = null;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -59,6 +37,17 @@ public class FileUtils {
                     e.printStackTrace();
                 }
             }
+        }
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    // 文件名转byte数组
+    public static byte[] fileToBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] bytes = new byte[1024];
+        int read;
+        while ((read = inputStream.read(bytes)) != -1) {
+            byteArrayOutputStream.write(bytes, 0, read);
         }
         return byteArrayOutputStream.toByteArray();
     }
