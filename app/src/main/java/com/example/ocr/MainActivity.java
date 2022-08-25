@@ -12,6 +12,8 @@ import com.example.ocr.logic.model.InvoiceData;
 import com.example.ocr.logic.util.Base64Utils;
 import com.example.ocr.logic.util.RetrofitUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,10 +28,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
         new Thread(() -> {
-
-            List<InvoiceData> invoice = RetrofitUtils.getInvoice(Base64Utils.fileToBase64("img_test2.png"));
-            for (InvoiceData invoiceData : invoice) {
-                Log.e(TAG, "run: " + invoiceData);
+            try {
+                InputStream inputStream = getAssets().open("img_test.png");
+                List<InvoiceData> invoices = new RetrofitUtils(this).getInvoice(inputStream);
+                for (InvoiceData invoiceData : invoices) {
+                    Log.e(TAG, "onCreate: " + invoiceData.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }).start();
     }

@@ -1,46 +1,46 @@
 package com.example.ocr.logic.util;
 
-import android.util.Log;
+import android.content.Context;
 
 import com.example.ocr.logic.dao.InvoiceService;
 import com.example.ocr.logic.model.InvoiceData;
-import com.example.ocr.logic.model.Token;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import cn.hutool.core.codec.Base64;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitUtils {
+    private Context mContext;
     private static final String TAG = "RetrofitUtils";
 
-    private static final Retrofit RETROFIT = new Retrofit.Builder()
+    public RetrofitUtils(Context context) {
+        mContext = context;
+    }
+
+    private final Retrofit RETROFIT = new Retrofit.Builder()
             .baseUrl(StringUtils.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    private static final InvoiceService INVOICE_SERVICE = RETROFIT.create(InvoiceService.class);
+    private final InvoiceService mInvoiceService = RETROFIT.create(InvoiceService.class);
 
-    public static List<InvoiceData> getInvoice(String imgBase64) {
-        List<InvoiceData> dataList = null;
-        try {
-            dataList = INVOICE_SERVICE.getInvoice(StringUtils.ACCESS_TOKEN, imgBase64).execute().body().getData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return dataList;
+    private List<InvoiceData> _getInvoice(String base64) throws IOException {
+        return mInvoiceService.getInvoice(StringUtils.ACCESS_TOKEN, base64).execute().body().getData();
+    }
+
+    // inputStream -> List<InvoiceData>
+    public List<InvoiceData> getInvoice(InputStream inputStream) throws IOException {
+        return _getInvoice(new Base64Utils(mContext).inputStreamToBase64(inputStream));
     }
 
     // 必须在所有网络请求之前
-    public static void getToken() {
-        try {
-            StringUtils.ACCESS_TOKEN = INVOICE_SERVICE.getToken().execute().body().getData().getAccess_token();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void getToken() throws IOException {
+        StringUtils.ACCESS_TOKEN = mInvoiceService.getToken().execute().body().getData().getAccess_token();
     }
+
 }
