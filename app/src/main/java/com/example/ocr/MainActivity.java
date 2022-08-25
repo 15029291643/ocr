@@ -3,6 +3,7 @@ package com.example.ocr;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.example.ocr.logic.model.InvoiceData;
 import com.example.ocr.logic.util.Base64Utils;
 import com.example.ocr.logic.util.ExcelUtils;
 import com.example.ocr.logic.util.RetrofitUtils;
+import com.example.ocr.ui.CameraActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+        // 发票识别测试
         /*new Thread(() -> {
             try {
                 InputStream inputStream = getAssets().open("img_test.png");
@@ -42,13 +45,15 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();*/
-        try {
+        // IO测试
+        /*try {
             ExcelUtils excelUtils = new ExcelUtils(this);
             excelUtils.writeTest();
             excelUtils.openTest();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+        startActivity(new Intent(this, CameraActivity.class));
     }
 
     public static Context getContext() {
