@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ocr.logic.model.InvoiceData;
 import com.example.ocr.logic.util.Base64Utils;
 import com.example.ocr.logic.util.ExcelUtils;
+import com.example.ocr.logic.util.FileUtils;
 import com.example.ocr.logic.util.RetrofitUtils;
 import com.example.ocr.ui.CameraActivity;
 import com.example.ocr.ui.HomeActivity;
@@ -49,12 +50,16 @@ public class MainActivity extends AppCompatActivity {
         // IO测试
         /*try {
             ExcelUtils excelUtils = new ExcelUtils(this);
-            excelUtils.writeTest();
-            excelUtils.openTest();
+            for (int i = 0; i < 5; i++) {
+                excelUtils.copyTest("xlsx_test" + i);
+            }
+            FileUtils fileUtils = new FileUtils(this);
+            fileUtils.getFiles();
         } catch (IOException e) {
             e.printStackTrace();
         }*/
         startActivity(new Intent(this, HomeActivity.class));
+
     }
 
     public static Context getContext() {

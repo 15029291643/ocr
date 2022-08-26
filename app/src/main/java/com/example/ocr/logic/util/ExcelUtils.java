@@ -62,8 +62,8 @@ public class ExcelUtils {
         IoUtil.copy(inputStream, outputStream);
     }
 
-    public void copyTest() throws IOException {
-        File file = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "txt_test2.txt");
+    public void copyTest(String childName) throws IOException {
+        File file = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), childName + ".xlsx");
         InputStream inputStream = mContext.getAssets().open("txt_test.txt");
         FileOutputStream outputStream = new FileOutputStream(file);
         copy(inputStream, outputStream);

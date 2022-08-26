@@ -16,9 +16,14 @@ import android.widget.Toast;
 
 import com.example.ocr.R;
 import com.example.ocr.databinding.FragmentFileBinding;
+import com.example.ocr.logic.util.ExcelUtils;
+import com.example.ocr.logic.util.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class FileFragment extends Fragment {
 
@@ -30,21 +35,26 @@ public class FileFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         mBinding = FragmentFileBinding.inflate(inflater, container, false);
-        return  mBinding.getRoot();
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String[] datas = {"file", "file.txt", "file.txt", "file.txt", "file.txt", "file.txt", "file.txt", "file.txt"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, datas);
-        mBinding.fileList.setAdapter(adapter);
-        mBinding.fileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String s = ((TextView) view).getText().toString();
-                Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-            }
-        });
+        try {
+            FileUtils fileUtils = new FileUtils(getContext());
+            ExcelUtils excelUtils = new ExcelUtils(getContext());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, fileUtils.getExcelNames());
+            mBinding.fileList.setAdapter(adapter);
+            mBinding.fileList.setOnItemClickListener((parent, view1, position, id) -> {
+                try {
+                    excelUtils.open(fileUtils.getExcelFiles().get(position));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
