@@ -15,6 +15,7 @@ import com.example.ocr.logic.util.Base64Utils;
 import com.example.ocr.logic.util.ExcelUtils;
 import com.example.ocr.logic.util.RetrofitUtils;
 import com.example.ocr.ui.CameraActivity;
+import com.example.ocr.ui.HomeActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        startActivity(new Intent(this, CameraActivity.class));
+        startActivity(new Intent(this, HomeActivity.class));
     }
 
     public static Context getContext() {

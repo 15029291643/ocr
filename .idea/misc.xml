@@ -8,7 +8,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/program/Android/Java/ocr/app/src/main/res/layout/activity_camera.xml" value="0.33697916666666666" />
+        <entry key="..\:/program/Android/Java/ocr/app/src/main/res/layout/activity_home.xml" value="0.33697916666666666" />
         <entry key="..\:/program/Android/Java/ocr/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/program/Android/Java/ocr/app/src/main/res/layout/fragment_file.xml" value="0.33697916666666666" />
+        <entry key="..\:/program/Android/Java/ocr/app/src/main/res/layout/fragment_person.xml" value="0.33697916666666666" />
+        <entry key="..\:/program/Android/Java/ocr/app/src/main/res/menu/menu_home.xml" value="0.33697916666666666" />
       </map>
     </option>
   </component>
