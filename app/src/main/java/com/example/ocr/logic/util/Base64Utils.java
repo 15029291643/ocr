@@ -1,23 +1,28 @@
 package com.example.ocr.logic.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.example.ocr.MainActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 
 // base64转换工具类
 public class Base64Utils {
-    private Context mContext;
+    private static Context mContext = MainActivity.getContext();
 
-    public Base64Utils(Context context) {
-        mContext = context;
-    }
 
     // 将内容string转成base64
-    private String base64Encode(String content, String charsetName) {
+    private static String base64Encode(String content, String charsetName) {
         if (TextUtils.isEmpty(charsetName)) {
             charsetName = "UTF-8";
         }
@@ -31,7 +36,7 @@ public class Base64Utils {
     }
 
     // 将内容base64转成string
-    private String base64Decode(String content, String charsetName) {
+    private static String base64Decode(String content, String charsetName) {
         if (TextUtils.isEmpty(charsetName)) {
             charsetName = "UTF-8";
         }
@@ -44,13 +49,19 @@ public class Base64Utils {
         return "";
     }
 
+    public static void fromUri(URI uri) throws IOException {
+
+        /*new FileInputStream(new File(new ))
+        Base64.encodeToString()*/
+    }
+
     // 文件名转base64
-    public String fileNameToBase64(String fileName) throws IOException {
-        return Base64.encodeToString(new FileUtils(mContext).fileNameToBytes(fileName), Base64.DEFAULT);
+    public static String fileNameToBase64(String fileName) throws IOException {
+        return Base64.encodeToString(new FileUtils().fileNameToBytes(fileName), Base64.DEFAULT);
     }
 
     // 文件输入流名转base64
-    public String inputStreamToBase64(InputStream inputStream) throws IOException {
-        return Base64.encodeToString(new FileUtils(mContext).inputStreamToBytes(inputStream), Base64.DEFAULT);
+    public static String inputStreamToBase64(InputStream inputStream) throws IOException {
+        return Base64.encodeToString(new FileUtils().inputStreamToBytes(inputStream), Base64.DEFAULT);
     }
 }

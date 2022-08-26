@@ -14,14 +14,12 @@ import java.util.List;
 public class HomeAdapter extends FragmentStateAdapter {
     private final List<Fragment> mFragments = new ArrayList<>(Arrays.asList(
             new FileFragment(),
-            new PersonFragment(),
             new PersonFragment()
     ));
 
     public HomeAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
-
 
     @NonNull
     @Override
