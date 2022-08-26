@@ -38,14 +38,15 @@ public class CameraActivity extends AppCompatActivity {
         mBinding = ActivityCameraBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         PictureUtils pictureUtils = new PictureUtils(this);
-        ActivityResultLauncher<String> launchByContent = pictureUtils.getLaunchByContent(new UriCallback() {
+        Uri uri = pictureUtils.getUri();
+        ActivityResultLauncher<Uri> launchToCamera = pictureUtils.getLaunchToCamera(uri, new UriCallback() {
             @Override
             public void getUri(Uri uri) {
                 mBinding.cameraImg.setImageURI(uri);
             }
         });
         mBinding.cameraBtn.setOnClickListener(view -> {
-            pictureUtils.launch(launchByContent);
+            pictureUtils.launchToCamera(uri, launchToCamera);
         });
     }
 
