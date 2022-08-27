@@ -12,23 +12,27 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.ocr.databinding.FragmentFileBinding;
+import com.example.ocr.logic.model.Form;
 import com.example.ocr.logic.model.InvoiceData;
 import com.example.ocr.logic.util.Base64Utils;
+import com.example.ocr.logic.util.ExcelUtils;
 import com.example.ocr.logic.util.FileUtils;
 import com.example.ocr.logic.util.RetrofitUtils;
 import com.example.ocr.ui.HomeViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class FileFragment extends Fragment {
@@ -37,8 +41,9 @@ public class FileFragment extends Fragment {
     private com.example.ocr.databinding.FragmentFileBinding mBinding;
     private static final String TAG = "FileFragment";
     private Context mContext;
-    private FragmentActivity mMActivity;
+    private FragmentActivity mActivity;
     private HomeViewModel mViewModel;
+    private FileAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,12 +57,12 @@ public class FileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mContext = requireContext();
-        mMActivity = requireActivity();
-        mViewModel = new ViewModelProvider(mMActivity).get(HomeViewModel.class);
+        mActivity = requireActivity();
+        mViewModel = new ViewModelProvider(mActivity).get(HomeViewModel.class);
 
         List<File> files = FileUtils.getExcelFiles();
-        FileAdapter fileAdapter = new FileAdapter(files);
-        mBinding.fileList.setAdapter(fileAdapter);
+        mAdapter = new FileAdapter(files);
+        mBinding.fileList.setAdapter(mAdapter);
         mBinding.fileList.setLayoutManager(new LinearLayoutManager(mContext));
         // 底部弹出
         ListView listView = new ListView(mContext);
@@ -70,12 +75,35 @@ public class FileFragment extends Fragment {
             dialog.show();
         });
         // 文件更新
-        mViewModel.getUriLiveData().observe(mMActivity, new Observer<Uri>() {
-            @Override
-            public void onChanged(Uri uri) {
-                File file = FileUtils.uriToFile(uri);
-                String base64 = Base64Utils.fromFile(file);
+        mViewModel.getUriLiveData().observe(mActivity, uri -> {
+            File file = FileUtils.uriToFile(uri);
+            String base64 = Base64Utils.fromFile(file);
+            new Thread(() -> {
                 List<InvoiceData> invoiceDatas = RetrofitUtils.getInvoiceDatas(base64);
+                mActivity.runOnUiThread(() -> {
+                    Form form = ExcelUtils.InvoicesToFrom(invoiceDatas);
+                    ArrayList<Form> forms = new ArrayList<>(Arrays.asList(
+                            form,
+                            form,
+                            form,
+                            form,
+                            form
+                    ));
+                    String fileName = new Date() + ".xlsx";
+                    ExcelUtils.create(forms, fileName);
+                    File file1 = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName);
+                    mAdapter.add(file1);
+                });
+            }).start();
+        });
+        mViewModel.getUrisLiveData().observe(mActivity, new Observer<List<Uri>>() {
+            @Override
+            public void onChanged(List<Uri> uris) {
+                for (Uri uri : uris) {
+                    File file = FileUtils.uriToFile(uri);
+                    String base64 = Base64Utils.fromFile(file);
+                    List<InvoiceData> invoiceDatas = RetrofitUtils.getInvoiceDatas(base64);
+                }
             }
         });
         // 获取照片
@@ -92,6 +120,7 @@ public class FileFragment extends Fragment {
                 default:
                     break;
             }
+            dialog.cancel();
         });
     }
 }

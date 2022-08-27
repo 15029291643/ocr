@@ -50,4 +50,8 @@ dependencies {
     }
     // 依赖冲突
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
+    // RxAndroid
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.2.0'
 }
