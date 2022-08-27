@@ -13,6 +13,7 @@ import java.util.List;
 public class HomeViewModel extends ViewModel {
     private static final String TAG = "HomeViewModel";
     private ActivityResultLauncher<String> mContentLauncher;
+    private ActivityResultLauncher<String> mContentLauncher2;
     private MutableLiveData<Uri> mUriLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Uri>> mUrisLiveData = new MutableLiveData<>();
 
@@ -28,6 +29,10 @@ public class HomeViewModel extends ViewModel {
         mContentLauncher = contentLauncher;
     }
 
+    public void setContentLauncher2(ActivityResultLauncher<String> contentLauncher) {
+        mContentLauncher2 = contentLauncher;
+    }
+
     public LiveData<Uri> getUriLiveData() {
         return mUriLiveData;
     }
@@ -40,10 +45,12 @@ public class HomeViewModel extends ViewModel {
     // 获取内容
     public void contentLaunch() {
         mContentLauncher.launch("image/*");
+
     }
 
-    // 获取照相
-    public void cameraLaunch() {
-        mContentLauncher.launch("image/*");
+    // 获取内容
+    public void contentLaunch2() {
+        mContentLauncher2.launch("image/*");
     }
+
 }

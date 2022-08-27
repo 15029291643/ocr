@@ -12,9 +12,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ocr.databinding.ActivityMainBinding;
 import com.example.ocr.logic.util.FileUtils;
+import com.example.ocr.logic.util.RetrofitUtils;
 import com.example.ocr.ui.HomeActivity;
 
 import java.io.IOException;
+
+import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -48,12 +51,8 @@ public class MainActivity extends AppCompatActivity {
         mActivity = this;
         mAppCompatActivity = this;
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        /*try {
-            FileUtils.copy("img_test.png", "img_test.png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        // 界面跳转
+
+        // new Thread(RetrofitUtils::initToken).start();
         startActivity(new Intent(this, HomeActivity.class));
     }
 

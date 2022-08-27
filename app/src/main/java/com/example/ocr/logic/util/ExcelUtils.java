@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.ocr.MainActivity;
 import com.example.ocr.logic.model.Form;
+import com.example.ocr.logic.model.Invoice;
 import com.example.ocr.logic.model.InvoiceData;
 import com.example.ocr.logic.model.User;
 
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -45,9 +47,11 @@ public class ExcelUtils {
         mContext.startActivity(intent);
     }
 
-    public static void create(List<Form> forms, String fileName) {
+
+    public static void create(List<List<InvoiceData>> invoicesList, String name) {
+        List<Form> forms = invoicesList.stream().map(ExcelUtils::invoicesToFrom).collect(Collectors.toList());
         try {
-            FileOutputStream outputStream = new FileOutputStream(new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName));
+            FileOutputStream outputStream = new FileOutputStream(new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
             Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), Form.class, forms);
             workbook.write(outputStream);
             workbook.close();
@@ -57,18 +61,18 @@ public class ExcelUtils {
         }
     }
 
-    public static Form InvoicesToFrom(List<InvoiceData> invoiceDatas) {
+    public static Form invoicesToFrom(List<InvoiceData> invoices) {
         return new Form(
-                invoiceDatas.get(0).getValue(),
-                invoiceDatas.get(1).getValue(),
-                invoiceDatas.get(2).getValue(),
-                invoiceDatas.get(3).getValue(),
-                invoiceDatas.get(4).getValue(),
-                invoiceDatas.get(5).getValue(),
-                invoiceDatas.get(6).getValue(),
-                invoiceDatas.get(7).getValue(),
-                invoiceDatas.get(8).getValue(),
-                invoiceDatas.get(9).getValue()
+                invoices.get(0).getValue(),
+                invoices.get(1).getValue(),
+                invoices.get(2).getValue(),
+                invoices.get(3).getValue(),
+                invoices.get(4).getValue(),
+                invoices.get(5).getValue(),
+                invoices.get(6).getValue(),
+                invoices.get(7).getValue(),
+                invoices.get(8).getValue(),
+                invoices.get(9).getValue()
         );
     }
 }

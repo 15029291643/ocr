@@ -36,39 +36,4 @@ public class OkHttpUtils {
         return sClient.newCall(request).execute().body().string();
     }
 
-    public static  void getTest() throws IOException {
-        Request request = new Request.Builder()
-                .url(BAIDU_URL)
-                .build();
-        String response = getResponse(request);
-        Log.e(TAG, "getTest: " + response);
-    }
-
-    public static  void getAccessToken() throws IOException {
-        String url = "https://ai.ybinsure.com/s/api/getAccessToken?accessKey="
-                + DataUtils.ACCESS_KEY
-                + "&accessSecret="
-                + DataUtils.ACCESS_SECRET;
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        String response = getResponse(request);
-        Log.e(TAG, "getAccessToken: " + response);
-    }
-
-    public static  void getVatInvoice() throws IOException {
-        String base64 = Base64Utils.fileNameToBase64("img_test.png");
-        RequestBody body = new FormBody.Builder()
-                .add("token", DataUtils.ACCESS_TOKEN)
-                .add("imgBase64", base64)
-                .build();
-        Request request = new Request.Builder()
-                .url("https://ai.ybinsure.com/s/api/ocr/vatInvoice")
-                .post(body)
-                .build();
-        String response = getResponse(request);
-        Log.e(TAG, "getVatInvoice: "+response);
-    }
-
-
 }
