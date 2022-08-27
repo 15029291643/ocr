@@ -25,7 +25,13 @@ public class HomeViewModel extends ViewModel {
         mUriLiveData.setValue(uri);
     }
 
+    // 获取内容
     public void contentLaunch() {
+        mContentLauncher.launch("image/*");
+    }
+
+    // 获取照相
+    public void cameraLaunch() {
         mContentLauncher.launch("image/*");
     }
 }

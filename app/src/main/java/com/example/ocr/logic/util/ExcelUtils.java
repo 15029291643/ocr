@@ -28,7 +28,7 @@ public class ExcelUtils {
     private static  Context mContext = MainActivity.getContext();
     private static final String TAG = "ExcelUtils";
 
-    public static  void open(File file) throws IOException {
+    public static  void open(File file) {
         Uri uri = Uri.fromFile(file);
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

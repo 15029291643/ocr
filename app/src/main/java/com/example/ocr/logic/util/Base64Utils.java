@@ -9,8 +9,13 @@ import android.util.Base64;
 
 import com.example.ocr.MainActivity;
 
+import org.apache.poi.util.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +24,21 @@ import java.net.URI;
 // base64转换工具类
 public class Base64Utils {
     private static Context mContext = MainActivity.getContext();
+
+    public static String fromFile(File file) {
+        String encode = null;
+        try {
+            FileInputStream inputStream = new FileInputStream(file);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(inputStream, outputStream);
+            encode = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+            inputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encode;
+    }
 
 
     // 将内容string转成base64

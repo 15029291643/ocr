@@ -53,7 +53,7 @@ public class FileUtils {
     }
 
     // 读取目录下的Excel文件
-    public static List<File> getExcelFiles() throws IOException {
+    public static List<File> getExcelFiles()  {
         File dir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return Arrays.stream(dir.listFiles()).filter(file -> file.getName().contains(".xlsx")).collect(Collectors.toList());
     }

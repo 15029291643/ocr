@@ -30,13 +30,16 @@ public class RetrofitUtils {
 
     private static final InvoiceService mInvoiceService = mRetrofit.create(InvoiceService.class);
 
-    private static List<InvoiceData> _getInvoice(String base64) throws IOException {
-        return mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, base64).execute().body().getData();
+    public static List<InvoiceData> getInvoiceDatas(String base64) {
+        List<InvoiceData> invoiceDatas = null;
+        try {
+            invoiceDatas = mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, base64).execute().body().getData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return invoiceDatas;
     }
 
-    public static List<InvoiceData> getInvoice(InputStream inputStream) throws IOException {
-        return _getInvoice(Base64Utils.inputStreamToBase64(inputStream));
-    }
 
     // 必须在所有网络请求之前
     public static void getToken() throws IOException {
