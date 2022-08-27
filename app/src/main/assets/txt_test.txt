@@ -1,3 +1,29 @@
-1345fasfas
-放假啊书法大赛
-反倒是卡JFK是
+    public void uploadImg(Object pcObj, String fileUrl) {
+
+        File file = new File(fileUrl);
+        // 创建 RequestBody，用于封装构建RequestBody
+        // RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+         RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpg"), file);
+
+        // MultipartBody.Part  和后端约定好Key，这里的partName是用file
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+
+        // 添加描述
+        String descriptionString = "hello, 这是文件描述";
+        RequestBody description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString);
+
+        // 执行请求
+        serviceApi.uploadSingleImg(description, body).enqueue(new BaseViewModel.HttpRequestCallback<List<PicResultData>>() {
+
+            @Override
+            public void onSuccess(List<PicResultData> result) {
+                super.onSuccess(result);
+            }
+
+            @Override
+            public void onFailure(int status, String message) {
+                super.onFailure(status, message);
+            }
+        });
+
+    }

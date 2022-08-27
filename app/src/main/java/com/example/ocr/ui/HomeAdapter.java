@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.ocr.ui.file.FileFragment;
+import com.example.ocr.ui.person.PersonFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

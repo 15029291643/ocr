@@ -5,23 +5,16 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ocr.databinding.ActivityMainBinding;
-import com.example.ocr.logic.callback.UriCallback;
-import com.example.ocr.logic.util.CameraUtils;
+import com.example.ocr.logic.util.FileUtils;
 import com.example.ocr.ui.HomeActivity;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -31,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     public static Context mContext;
     public static AppCompatActivity mAppCompatActivity;
     private static MainViewModel mViewModel;
-    private static ActivityResultLauncher<String> launcher;
     private ActivityMainBinding mBinding;
 
     public static Context getContext() {
@@ -46,13 +38,6 @@ public class MainActivity extends AppCompatActivity {
         return mAppCompatActivity;
     }
 
-    public static MainViewModel getViewModel() {
-        return mViewModel;
-    }
-
-    public static ActivityResultLauncher<String> getLauncher() {
-        return launcher;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +48,11 @@ public class MainActivity extends AppCompatActivity {
         mActivity = this;
         mAppCompatActivity = this;
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        // 相机工具类
-        launcher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-            Log.e(TAG, "onCreate: " + "launcher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {");
-            mViewModel.setUri(uri);
-        });
-        mViewModel.getUriLiveData().observe(this, mBinding.mainImg::setImageURI);
-        mBinding.mainBtn.setOnClickListener(v -> launcher.launch("image/*"));
+        /*try {
+            FileUtils.copy("img_test.png", "img_test.png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
         // 界面跳转
         startActivity(new Intent(this, HomeActivity.class));
     }

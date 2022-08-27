@@ -1,11 +1,13 @@
 package com.example.ocr.logic.util;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.example.ocr.MainActivity;
 import com.example.ocr.logic.dao.InvoiceService;
 import com.example.ocr.logic.model.InvoiceData;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -32,7 +34,6 @@ public class RetrofitUtils {
         return mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, base64).execute().body().getData();
     }
 
-    // inputStream -> List<InvoiceData>
     public static List<InvoiceData> getInvoice(InputStream inputStream) throws IOException {
         return _getInvoice(Base64Utils.inputStreamToBase64(inputStream));
     }
