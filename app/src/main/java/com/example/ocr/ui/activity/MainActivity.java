@@ -1,4 +1,4 @@
-package com.example.ocr;
+package com.example.ocr.ui.activity;
 
 
 import android.annotation.SuppressLint;
@@ -10,14 +10,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.ocr.ui.viewModel.MainViewModel;
 import com.example.ocr.databinding.ActivityMainBinding;
-import com.example.ocr.logic.util.FileUtils;
-import com.example.ocr.logic.util.RetrofitUtils;
-import com.example.ocr.ui.HomeActivity;
-
-import java.io.IOException;
-
-import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";

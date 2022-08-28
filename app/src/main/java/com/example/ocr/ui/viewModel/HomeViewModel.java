@@ -1,4 +1,4 @@
-package com.example.ocr.ui;
+package com.example.ocr.ui.viewModel;
 
 import android.net.Uri;
 import android.util.Log;

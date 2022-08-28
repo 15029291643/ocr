@@ -1,12 +1,12 @@
-package com.example.ocr.ui;
+package com.example.ocr.ui.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.ocr.ui.file.FileFragment;
-import com.example.ocr.ui.person.PersonFragment;
+import com.example.ocr.ui.fragment.FileFragment;
+import com.example.ocr.ui.fragment.PersonFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

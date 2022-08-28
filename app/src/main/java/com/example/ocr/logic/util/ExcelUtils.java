@@ -4,34 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
-import com.example.ocr.MainActivity;
+import com.example.ocr.ui.activity.MainActivity;
 import com.example.ocr.logic.model.Form;
-import com.example.ocr.logic.model.Invoice;
 import com.example.ocr.logic.model.InvoiceData;
-import com.example.ocr.logic.model.User;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.io.IoUtil;
 
 // excel操作工具类
 public class ExcelUtils {

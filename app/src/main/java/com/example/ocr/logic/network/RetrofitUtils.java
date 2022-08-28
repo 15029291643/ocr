@@ -1,17 +1,14 @@
-package com.example.ocr.logic.util;
+package com.example.ocr.logic.network;
 
-import android.content.Context;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 
-import com.example.ocr.MainActivity;
 import com.example.ocr.logic.dao.InvoiceService;
 import com.example.ocr.logic.model.InvoiceData;
+import com.example.ocr.logic.util.DataUtils;
+import com.example.ocr.logic.util.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import retrofit2.Retrofit;

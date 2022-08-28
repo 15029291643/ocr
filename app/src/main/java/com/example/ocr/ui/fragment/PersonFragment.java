@@ -1,10 +1,7 @@
-package com.example.ocr.ui.person;
+package com.example.ocr.ui.fragment;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ocr.databinding.FragmentPersonBinding;
-import com.example.ocr.logic.model.InvoiceData;
-import com.example.ocr.logic.util.FileUtils;
-import com.example.ocr.logic.util.RetrofitUtils;
-import com.example.ocr.ui.HomeViewModel;
-
-import org.apache.poi.util.IOUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-
-import cn.hutool.bloomfilter.bitMap.BitMap;
-import cn.hutool.core.io.IoUtil;
+import com.example.ocr.ui.viewModel.HomeViewModel;
 
 public  class PersonFragment extends Fragment {
 

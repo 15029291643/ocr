@@ -3,12 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:icon="@drawable/ic_launcher_background"
-        android:title="Item" />
+        android:id="@+id/nav_file"
+        android:icon="@drawable/ic_menu_file"
+        android:title="文件" />
     <item
-        android:icon="@drawable/ic_launcher_background"
-        android:title="Item" />
+        android:id="@+id/nav_camera"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="相机" />
     <item
-        android:icon="@drawable/ic_launcher_background"
-        android:title="Item" />
+        android:id="@+id/nav_me"
+        android:icon="@drawable/ic_menu_me"
+        android:title="我的" />
 </menu>
