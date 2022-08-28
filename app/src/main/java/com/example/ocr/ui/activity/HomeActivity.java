@@ -1,6 +1,7 @@
 package com.example.ocr.ui.activity;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +18,9 @@ import com.example.ocr.ui.viewModel.HomeViewModel;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
     private ActivityHomeBinding mBinding;
@@ -29,18 +33,25 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(mBinding.getRoot());
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
+        ArrayList<Integer> ids = new ArrayList<>(Arrays.asList(
+                R.id.nav_file,
+                R.id.nav_camera,
+                R.id.nav_me
+        ));
+        String[] titles = {"文件", "相机", "我的"};
+        mBinding.homeToolbar.setTitle(titles[0]);
         // 禁止滑动
         mBinding.homeViewPager.setUserInputEnabled(false);
         mBinding.homeViewPager.setAdapter(new HomeAdapter(this));
         mBinding.homeNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.:
-                        startActivity(new Intent(HomeActivity.this, MainActivity.class));
-                        break;
-                }
-                return false;
+
+                int position = ids.indexOf(item.getItemId());
+                mBinding.homeToolbar.setTitle(titles[position]);
+                mBinding.homeViewPager.setCurrentItem(position, false);
+                return true;
             }
         });
         mViewModel.setContentLauncher(registerForActivityResult(new ActivityResultContracts.GetContent(), mViewModel::setUri));
