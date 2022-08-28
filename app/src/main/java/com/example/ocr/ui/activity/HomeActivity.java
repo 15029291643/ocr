@@ -4,8 +4,10 @@ package com.example.ocr.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.view.MenuItem;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,18 +45,19 @@ public class HomeActivity extends AppCompatActivity {
         // 禁止滑动
         mBinding.homeViewPager.setUserInputEnabled(false);
         mBinding.homeViewPager.setAdapter(new HomeAdapter(this));
-        mBinding.homeNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                int position = ids.indexOf(item.getItemId());
-                mBinding.homeToolbar.setTitle(titles[position]);
-                mBinding.homeViewPager.setCurrentItem(position, false);
-                return true;
-            }
+        mBinding.homeNavigation.setOnItemSelectedListener(item -> {
+            int position = ids.indexOf(item.getItemId());
+            mBinding.homeToolbar.setTitle(titles[position]);
+            mBinding.homeViewPager.setCurrentItem(position, false);
+            return true;
         });
         mViewModel.setContentLauncher(registerForActivityResult(new ActivityResultContracts.GetContent(), mViewModel::setUri));
         mViewModel.setContentLauncher2(registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), mViewModel::setUris));
+        registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+
+            }
+        });
     }
 }

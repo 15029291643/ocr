@@ -12,6 +12,7 @@ import com.example.ocr.databinding.AdapterFileBinding;
 import com.example.ocr.logic.util.ExcelUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
@@ -30,9 +31,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull FileAdapter.FileHolder holder, @SuppressLint("RecyclerView") int position) {
-        /*holder.name.setText(files.get(position).getName());
+        holder.name.setText(files.get(position).getName());
+        holder.time.setText(files.get(position).getPath().split("files/")[1]);
         // 通过WPS打开Excel
-        holder.itemView.setOnClickListener(v -> ExcelUtils.open(files.get(position)));*/
+        holder.itemView.setOnClickListener(v -> ExcelUtils.open(files.get(position)));
     }
 
     @Override
@@ -43,11 +45,12 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
 
     public static class FileHolder extends RecyclerView.ViewHolder {
         TextView name;
-        TextView path;
+        TextView time;
 
         public FileHolder(AdapterFileBinding binding) {
             super(binding.getRoot());
-
+            name = binding.fileName;
+            time = binding.fileTime;
         }
     }
 

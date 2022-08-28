@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.ocr.R;
 import com.example.ocr.databinding.FragmentFileBinding;
 import com.example.ocr.logic.model.InvoiceData;
 import com.example.ocr.logic.network.RetrofitUtils;
@@ -29,23 +32,28 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import cn.hutool.core.date.DateUtil;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class FileFragment extends Fragment {
 
 
-    private com.example.ocr.databinding.FragmentFileBinding mBinding;
+    private FragmentFileBinding mBinding;
     private static final String TAG = "FileFragment";
     private Context mContext;
     private FragmentActivity mActivity;
     private HomeViewModel mViewModel;
     private FileAdapter mAdapter;
+    private List<List<InvoiceData>> invoicesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,83 +70,63 @@ public class FileFragment extends Fragment {
         mActivity = requireActivity();
         mViewModel = new ViewModelProvider(mActivity).get(HomeViewModel.class);
 
-        // List<File> files = FileUtils.getExcelFileList();
-        mAdapter = new FileAdapter(null);
+        List<File> files = FileUtils.getExcelFileList();
+        mAdapter = new FileAdapter(files);
         mBinding.fileList.setLayoutManager(new LinearLayoutManager(mContext));
         mBinding.fileList.setAdapter(mAdapter);
-        // 底部弹出
-        ListView listView = new ListView(mContext);
-        String[] modes = {"相机", "图库"};
-        listView.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, modes));
+
         BottomSheetDialog dialog = new BottomSheetDialog(mContext);
-        dialog.setContentView(listView);
+        dialog.setContentView(R.layout.view_camera);
         // 添加按钮
         mBinding.fileAdd.setOnClickListener(v -> {
             dialog.show();
         });
-        /*// 文件更新
+        TextView camera = dialog.findViewById(R.id.file_camera);
+        TextView content = dialog.findViewById(R.id.file_content);
+        TextView cancel = dialog.findViewById(R.id.file_cancel);
+        // 选择图片
+        camera.setOnClickListener(v -> {
+            Toast.makeText(mContext, "Camera", Toast.LENGTH_SHORT).show();
+        });
+        // 选择图片
+        content.setOnClickListener(v -> {
+            invoicesList = new ArrayList<>();
+            mViewModel.contentLaunch2();
+            Toast.makeText(mContext, "content", Toast.LENGTH_SHORT).show();
+        });
+        // 选择图片
+        cancel.setOnClickListener(v -> {
+            if (dialog.isShowing()) {
+                dialog.cancel();
+            }
+        });
+        // 文件更新
         mViewModel.getUriLiveData().observe(mActivity, uri -> {
             Observable.create((Observable.OnSubscribe<List<InvoiceData>>) subscriber -> {
-                subscriber.onNext(RetrofitUtils.getInvoices(uri));
-            }).subscribeOn(Schedulers.io())
+                        subscriber.onNext(RetrofitUtils.getInvoices(uri));
+                    }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(invoiceData -> {
-                        ArrayList<List<InvoiceData>> invoicesList = new ArrayList<>(Arrays.asList(
-                                invoiceData,
-                                invoiceData,
-                                invoiceData,
+                        ArrayList<List<InvoiceData>> invoicesList = new ArrayList<>(Collections.singletonList(
                                 invoiceData
                         ));
                         String name = DateUtil.now() + ".xlsx";
                         ExcelUtils.create(invoicesList, name);
                         mAdapter.add(new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
                     });
-        });*/
+        });
+
         mViewModel.getUrisLiveData().observe(mActivity, uris -> {
             Observable.from(uris)
                     .map(RetrofitUtils::getInvoices)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<List<InvoiceData>>() {
-                        final List<List<InvoiceData>> invoicesList = new ArrayList<>();
-
-                        @Override
-                        public void onCompleted() {
-                            Log.e(TAG, "onCompleted: ");
-                            String name = DateUtil.now() + ".xlsx";
-                            ExcelUtils.create(invoicesList, name);
-                            mAdapter.add(new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e(TAG, "onError: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-
-                        @Override
-                        public void onNext(List<InvoiceData> invoiceData) {
-                            Log.e(TAG, "onNext: ");
-                            invoicesList.add(invoiceData);
-                        }
+                    .subscribe(invoicesList::add, Throwable::printStackTrace, () -> {
+                        String name = DateUtil.now() + ".xlsx";
+                        ExcelUtils.create(invoicesList, name);
+                        mAdapter.add(new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
                     });
         });
-
-        // 获取照片
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            switch (position) {
-                // 拍照
-                case 0:
-
-                    break;
-                // 相册
-                case 1:
-                    mViewModel.contentLaunch2();
-                    break;
-                default:
-                    break;
-            }
-            dialog.cancel();
-        });
     }
+
 }
