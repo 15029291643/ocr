@@ -33,7 +33,7 @@ public class RetrofitUtils {
         try {
             Invoice invoice = mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, FileUtils.uriToBase64(uri)).execute().body();
             Log.e(TAG, "getInvoices: " + invoice);
-            if (invoice.getCode() == 200) {
+            if (invoice.getStatus() == 200) {
                 invoices = invoice.getData();
             } else {
                 Toast.makeText(mContext, "请选择正确的图片格式", Toast.LENGTH_SHORT).show();
