@@ -32,6 +32,7 @@ public class RetrofitUtils {
         List<InvoiceData> invoices = null;
         try {
             Invoice invoice = mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, FileUtils.uriToBase64(uri)).execute().body();
+            Log.e(TAG, "getInvoices: " + invoice);
             if (invoice.getCode() == 200) {
                 invoices = invoice.getData();
             } else {

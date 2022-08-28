@@ -2,6 +2,8 @@ package com.example.ocr.ui.adapter;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,12 +38,20 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
         holder.time.setText(files.get(position).getPath().split("files/")[1]);
         // 通过WPS打开Excel
         holder.itemView.setOnClickListener(v -> ExcelUtils.open(files.get(position)));
+        // 删除
+        holder.more.setOnClickListener(v -> {
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("删除")
+                    .setMessage("确定删除" + files.get(position).getName() + "吗?")
+                    .setPositiveButton("确定", (dialog, which) -> remove(position))
+                    .setNegativeButton("取消", (dialog, which) -> {})
+                    .show();
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 10;
-        // return files.size();
+        return files.size();
     }
 
     public static class FileHolder extends RecyclerView.ViewHolder {
@@ -60,5 +70,11 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
     public void add(File file) {
         files.add(file);
         notifyItemInserted(files.size() - 1);
+    }
+
+    public void remove(int position) {
+        files.get(position).delete();
+        files.remove(position);
+        notifyItemRemoved(position);
     }
 }
