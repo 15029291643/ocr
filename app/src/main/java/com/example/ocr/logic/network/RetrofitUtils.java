@@ -1,9 +1,13 @@
 package com.example.ocr.logic.network;
 
+import static com.example.ocr.ui.activity.MainActivity.mContext;
+
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.ocr.logic.dao.InvoiceService;
+import com.example.ocr.logic.model.Invoice;
 import com.example.ocr.logic.model.InvoiceData;
 import com.example.ocr.logic.util.DataUtils;
 import com.example.ocr.logic.util.FileUtils;
@@ -27,8 +31,14 @@ public class RetrofitUtils {
     public static List<InvoiceData> getInvoices(Uri uri) {
         List<InvoiceData> invoices = null;
         try {
-            invoices = mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, FileUtils.uriToBase64(uri)).execute().body().getData();
-        } catch (IOException e) {
+            Invoice invoice = mInvoiceService.getInvoice(DataUtils.ACCESS_TOKEN, FileUtils.uriToBase64(uri)).execute().body();
+            if (invoice.getCode() == 200) {
+                invoices = invoice.getData();
+            } else {
+                Toast.makeText(mContext, "请选择正确的图片格式", Toast.LENGTH_SHORT).show();
+                throw new Exception(invoice.toString());
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return invoices;

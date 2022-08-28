@@ -4,12 +4,9 @@ package com.example.ocr.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,16 +29,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import cn.hutool.core.date.DateUtil;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class FileFragment extends Fragment {
@@ -86,22 +79,23 @@ public class FileFragment extends Fragment {
         TextView cancel = dialog.findViewById(R.id.file_cancel);
         // 选择图片
         camera.setOnClickListener(v -> {
-            Toast.makeText(mContext, "Camera", Toast.LENGTH_SHORT).show();
+            dialog.cancel();
+            Toast.makeText(mContext, "功能已关闭", Toast.LENGTH_SHORT).show();
+            // mViewModel.uriLauncherLaunch();
         });
         // 选择图片
         content.setOnClickListener(v -> {
+            dialog.cancel();
             invoicesList = new ArrayList<>();
             mViewModel.contentLaunch2();
             Toast.makeText(mContext, "content", Toast.LENGTH_SHORT).show();
         });
         // 选择图片
         cancel.setOnClickListener(v -> {
-            if (dialog.isShowing()) {
-                dialog.cancel();
-            }
+            dialog.cancel();
         });
         // 文件更新
-        mViewModel.getUriLiveData().observe(mActivity, uri -> {
+        mViewModel.getUri().observe(mActivity, uri -> {
             Observable.create((Observable.OnSubscribe<List<InvoiceData>>) subscriber -> {
                         subscriber.onNext(RetrofitUtils.getInvoices(uri));
                     }).subscribeOn(Schedulers.io())

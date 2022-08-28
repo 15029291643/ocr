@@ -32,7 +32,7 @@ public  class MeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        mViewModel.getUriLiveData().observe(requireActivity(), uri -> {
+        mViewModel.getUri().observe(requireActivity(), uri -> {
             // mBinding.personImg.setImageURI(uri);
         });
         // mBinding.personBtn.setOnClickListener(v -> mViewModel.contentLaunch());

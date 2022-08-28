@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.ocr.ui.fragment.CameraFragment;
 import com.example.ocr.ui.fragment.FileFragment;
 import com.example.ocr.ui.fragment.MeFragment;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class HomeAdapter extends FragmentStateAdapter {
     private final List<Fragment> mFragments = new ArrayList<>(Arrays.asList(
             new FileFragment(),
-            new MeFragment(),
+            new CameraFragment(),
             new MeFragment()
     ));
 

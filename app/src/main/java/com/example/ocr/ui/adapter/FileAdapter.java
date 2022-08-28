@@ -1,8 +1,10 @@
 package com.example.ocr.ui.adapter;
 
+
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +14,6 @@ import com.example.ocr.databinding.AdapterFileBinding;
 import com.example.ocr.logic.util.ExcelUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
@@ -46,11 +47,13 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
     public static class FileHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView time;
+        ImageView more;
 
         public FileHolder(AdapterFileBinding binding) {
             super(binding.getRoot());
             name = binding.fileName;
             time = binding.fileTime;
+            more = binding.fileMore;
         }
     }
 

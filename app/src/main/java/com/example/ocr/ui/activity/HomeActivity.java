@@ -1,15 +1,9 @@
 package com.example.ocr.ui.activity;
 
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.FileUtils;
-import android.view.MenuItem;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,8 +11,6 @@ import com.example.ocr.R;
 import com.example.ocr.databinding.ActivityHomeBinding;
 import com.example.ocr.ui.adapter.HomeAdapter;
 import com.example.ocr.ui.viewModel.HomeViewModel;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +19,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
     private ActivityHomeBinding mBinding;
     private HomeViewModel mViewModel;
+    private int prePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +40,21 @@ public class HomeActivity extends AppCompatActivity {
         mBinding.homeViewPager.setAdapter(new HomeAdapter(this));
         mBinding.homeNavigation.setOnItemSelectedListener(item -> {
             int position = ids.indexOf(item.getItemId());
+            /*if (position == 1) {
+
+                mBinding.homeNavigation.getItem
+                return true;
+            }*/
             mBinding.homeToolbar.setTitle(titles[position]);
             mBinding.homeViewPager.setCurrentItem(position, false);
+            prePosition = position;
             return true;
         });
         mViewModel.setContentLauncher(registerForActivityResult(new ActivityResultContracts.GetContent(), mViewModel::setUri));
         mViewModel.setContentLauncher2(registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), mViewModel::setUris));
-        registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult(Boolean result) {
 
-            }
-        });
+        mViewModel.setUriLauncher(registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
+            mViewModel.setUri(mViewModel.getTempUri());
+        }));
     }
 }
