@@ -3,7 +3,7 @@ package com.example.ocr.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +20,7 @@ import java.util.List;
 
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
     private List<File> files;
+    private static final String TAG = "FileAdapter";
 
     public FileAdapter(List<File> files) {
         this.files = files;
@@ -34,15 +35,19 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull FileAdapter.FileHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.name.setText(files.get(position).getName());
-        holder.time.setText(files.get(position).getPath().split("files/")[1]);
+        String name = files.get(position).getName();
+        // 文件之前的目录
+        Log.e(TAG, "onBindViewHolder: " + files.get(position).getPath());
+        String path = files.get(position).getPath().split("files/")[1].replace("/" + name, "");
+        holder.name.setText(name);
+        holder.path.setText(path);
         // 通过WPS打开Excel
         holder.itemView.setOnClickListener(v -> ExcelUtils.open(files.get(position)));
         // 删除
         holder.more.setOnClickListener(v -> {
             new AlertDialog.Builder(holder.itemView.getContext())
                     .setTitle("删除")
-                    .setMessage("确定删除" + files.get(position).getName() + "吗?")
+                    .setMessage("确定删除" + name + "吗?")
                     .setPositiveButton("确定", (dialog, which) -> remove(position))
                     .setNegativeButton("取消", (dialog, which) -> {})
                     .show();
@@ -56,20 +61,21 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
 
     public static class FileHolder extends RecyclerView.ViewHolder {
         TextView name;
-        TextView time;
+        TextView path;
         ImageView more;
 
         public FileHolder(AdapterFileBinding binding) {
             super(binding.getRoot());
-            name = binding.fileName;
-            time = binding.fileTime;
-            more = binding.fileMore;
+            name = binding.name;
+            path = binding.path;
+            more = binding.more;
         }
     }
 
+    // 从头添加
     public void add(File file) {
-        files.add(file);
-        notifyItemInserted(files.size() - 1);
+        files.add(0, file);
+        notifyItemInserted(0);
     }
 
     public void remove(int position) {

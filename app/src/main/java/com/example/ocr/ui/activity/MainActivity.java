@@ -10,7 +10,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.ocr.ui.viewModel.MainViewModel;
 import com.example.ocr.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     public static Context mContext;
     public static AppCompatActivity mAppCompatActivity;
-    private static MainViewModel mViewModel;
     private ActivityMainBinding mBinding;
 
     public static Context getContext() {
@@ -44,9 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         mActivity = this;
         mAppCompatActivity = this;
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        // new Thread(RetrofitUtils::initToken).start();
         startActivity(new Intent(this, HomeActivity.class));
     }
 

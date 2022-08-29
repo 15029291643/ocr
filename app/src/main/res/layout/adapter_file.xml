@@ -20,45 +20,45 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/file_ic"
+                android:id="@+id/icon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/file_name"
+                app:layout_constraintEnd_toStartOf="@+id/name"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_item_file2" />
 
             <TextView
-                android:id="@+id/file_name"
+                android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="文件名"
-                app:layout_constraintBottom_toTopOf="@+id/file_time"
-                app:layout_constraintEnd_toStartOf="@+id/file_more"
+                app:layout_constraintBottom_toTopOf="@+id/path"
+                app:layout_constraintEnd_toStartOf="@+id/more"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/file_ic"
+                app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/file_time"
+                android:id="@+id/path"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="更新时间"
+                android:text="文件路径"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/file_more"
+                app:layout_constraintEnd_toStartOf="@+id/more"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/file_ic"
-                app:layout_constraintTop_toBottomOf="@+id/file_name" />
+                app:layout_constraintStart_toEndOf="@+id/icon"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
 
             <ImageView
-                android:id="@+id/file_more"
+                android:id="@+id/more"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="16dp"
@@ -66,7 +66,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/file_time"
+                app:layout_constraintStart_toEndOf="@+id/path"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_item_more" />
         </androidx.constraintlayout.widget.ConstraintLayout>

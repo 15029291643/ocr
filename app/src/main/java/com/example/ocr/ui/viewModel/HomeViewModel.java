@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
-    private final Context mContext = MyApplication.getmContext();
+    private final Context mContext = MyApplication.getContext();
     private static final String TAG = "HomeViewModel";
     private ActivityResultLauncher<String> mContentLauncher;
     private ActivityResultLauncher<String> mContentLauncher2;

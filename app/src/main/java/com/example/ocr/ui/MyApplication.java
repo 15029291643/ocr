@@ -8,7 +8,7 @@ public class MyApplication extends Application {
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
 
-    public static Context getmContext() {
+    public static Context getContext() {
         return mContext;
     }
 

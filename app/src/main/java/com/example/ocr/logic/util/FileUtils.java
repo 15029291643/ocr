@@ -35,6 +35,47 @@ public class FileUtils {
         return Arrays.stream(dir.listFiles()).filter(file -> file.getName().contains(".xlsx")).collect(Collectors.toList());
     }
 
+    // 测试
+    public static InputStream getInputStreamTest() {
+        InputStream inputStream = null;
+        try {
+            inputStream = mContext.getAssets().open("img_test2.png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return inputStream;
+    }
+
+    public static String getBase64Test() {
+        return inputStreamToBase64(getInputStreamTest());
+    }
+
+    // 测试
+    public static String inputStreamToBase64(InputStream inputStream) {
+        String encode = "";
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(inputStream, outputStream);
+            encode = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encode;
+    }
+
+    public static String uriToBase64(Uri uri) {
+        File file = FileUtils.uriToFile(uri);
+        String encode = null;
+        try {
+            FileInputStream inputStream = new FileInputStream(file);
+            encode = inputStreamToBase64(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encode;
+    }
 
     // 网上复制
     public static File uriToFile(Uri uri) {
@@ -64,21 +105,4 @@ public class FileUtils {
         }
         return file;
     }
-
-    public static String uriToBase64(Uri uri) {
-        File file = FileUtils.uriToFile(uri);
-        String encode = null;
-        try {
-            FileInputStream inputStream = new FileInputStream(file);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            IOUtils.copy(inputStream, outputStream);
-            encode = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
-            inputStream.close();
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return encode;
-    }
-
 }

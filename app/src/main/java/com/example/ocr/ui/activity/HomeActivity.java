@@ -1,9 +1,11 @@
 package com.example.ocr.ui.activity;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -19,42 +21,47 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
     private ActivityHomeBinding mBinding;
     private HomeViewModel mViewModel;
-    private int prePosition;
+    private ArrayList<Integer> mIds;
+    private String[] mTitles;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        initData();
+        // DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mBinding.drawerLayout, mBinding.includeContent.toolbar,  R.string.app_name, R.string.app_name);
+        mBinding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        // Toolbar
+        mBinding.includeContent.toolbar.setTitle(mTitles[0]);
+        // ViewPager2
+        mBinding.includeContent.viewPager.setUserInputEnabled(false);
+        mBinding.includeContent.viewPager.setAdapter(new HomeAdapter(this));
+        // BottomNavigationView
+        mBinding.includeContent.bottomNavigationView.setOnItemSelectedListener(item -> {
+            int position = mIds.indexOf(item.getItemId());
+            // Toolbar
+            mBinding.includeContent.toolbar.setTitle(mTitles[position]);
+            // ViewPager2
+            mBinding.includeContent.viewPager.setCurrentItem(position, false);
+            return true;
+        });
+        // registerForActivityResult
+        mViewModel.setContentLauncher2(registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), mViewModel::setUris));
 
-        ArrayList<Integer> ids = new ArrayList<>(Arrays.asList(
+        mViewModel.setUriLauncher(registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> mViewModel.setUri(mViewModel.getTempUri())));
+    }
+
+    private void initData() {
+        mIds = new ArrayList<>(Arrays.asList(
                 R.id.nav_file,
                 R.id.nav_camera,
                 R.id.nav_me
         ));
-        String[] titles = {"文件", "相机", "我的"};
-        mBinding.homeToolbar.setTitle(titles[0]);
-        // 禁止滑动
-        mBinding.homeViewPager.setUserInputEnabled(false);
-        mBinding.homeViewPager.setAdapter(new HomeAdapter(this));
-        mBinding.homeNavigation.setOnItemSelectedListener(item -> {
-            int position = ids.indexOf(item.getItemId());
-            /*if (position == 1) {
-
-                mBinding.homeNavigation.getItem
-                return true;
-            }*/
-            mBinding.homeToolbar.setTitle(titles[position]);
-            mBinding.homeViewPager.setCurrentItem(position, false);
-            prePosition = position;
-            return true;
-        });
-        mViewModel.setContentLauncher(registerForActivityResult(new ActivityResultContracts.GetContent(), mViewModel::setUri));
-        mViewModel.setContentLauncher2(registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), mViewModel::setUris));
-
-        mViewModel.setUriLauncher(registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
-            mViewModel.setUri(mViewModel.getTempUri());
-        }));
+        mTitles = new String[]{"文件", "相机", "我的"};
     }
 }

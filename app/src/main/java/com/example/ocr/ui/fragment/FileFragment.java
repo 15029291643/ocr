@@ -65,18 +65,18 @@ public class FileFragment extends Fragment {
 
         List<File> files = FileUtils.getExcelFileList();
         mAdapter = new FileAdapter(files);
-        mBinding.fileList.setLayoutManager(new LinearLayoutManager(mContext));
-        mBinding.fileList.setAdapter(mAdapter);
+        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mBinding.recyclerView.setAdapter(mAdapter);
 
         BottomSheetDialog dialog = new BottomSheetDialog(mContext);
         dialog.setContentView(R.layout.view_camera);
         // 添加按钮
-        mBinding.fileAdd.setOnClickListener(v -> {
+        mBinding.floatingActionButton.setOnClickListener(v -> {
             dialog.show();
         });
-        TextView camera = dialog.findViewById(R.id.file_camera);
-        TextView content = dialog.findViewById(R.id.file_content);
-        TextView cancel = dialog.findViewById(R.id.file_cancel);
+        TextView camera = dialog.findViewById(R.id.camera);
+        TextView content = dialog.findViewById(R.id.content);
+        TextView cancel = dialog.findViewById(R.id.cancel);
         // 选择图片
         camera.setOnClickListener(v -> {
             dialog.cancel();

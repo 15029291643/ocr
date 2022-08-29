@@ -10,34 +10,34 @@
 
 
     <TextView
-        android:id="@+id/file_camera"
+        android:id="@+id/camera"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="@color/white"
         android:gravity="center"
         android:text="拍照"
-        app:layout_constraintBottom_toTopOf="@+id/file_content"
+        app:layout_constraintBottom_toTopOf="@+id/content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/file_content"
+        android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="1dp"
         android:background="@color/white"
         android:gravity="center"
         android:text="相册"
-        app:layout_constraintBottom_toTopOf="@+id/file_cancel"
+        app:layout_constraintBottom_toTopOf="@+id/cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/file_camera" />
+        app:layout_constraintTop_toBottomOf="@+id/camera" />
 
     <TextView
-        android:id="@+id/file_cancel"
+        android:id="@+id/cancel"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
@@ -48,6 +48,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/file_content" />
+        app:layout_constraintTop_toBottomOf="@+id/content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
