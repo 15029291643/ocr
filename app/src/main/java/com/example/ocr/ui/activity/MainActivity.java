@@ -8,40 +8,39 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ocr.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     @SuppressLint("StaticFieldLeak")
-    private static Activity mActivity;
+    private static Activity activity;
     @SuppressLint("StaticFieldLeak")
-    public static Context mContext;
-    public static AppCompatActivity mAppCompatActivity;
-    private ActivityMainBinding mBinding;
+    public static Context context;
+    public static AppCompatActivity appCompatActivity;
+    private ActivityMainBinding binding;
 
     public static Context getContext() {
-        return mContext;
+        return context;
     }
 
     public static Activity getActivity() {
-        return mActivity;
+        return activity;
     }
 
     public static AppCompatActivity getAppCompatActivity() {
-        return mAppCompatActivity;
+        return appCompatActivity;
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(mBinding.getRoot());
-        mContext = this;
-        mActivity = this;
-        mAppCompatActivity = this;
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        context = this;
+        activity = this;
+        appCompatActivity = this;
 
         startActivity(new Intent(this, HomeActivity.class));
     }

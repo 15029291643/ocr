@@ -1,6 +1,7 @@
 package com.example.ocr.ui.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,9 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.ocr.R;
 import com.example.ocr.databinding.FragmentFileBinding;
 import com.example.ocr.logic.model.InvoiceData;
-import com.example.ocr.logic.network.RetrofitUtils;
 import com.example.ocr.logic.util.ExcelUtils;
-import com.example.ocr.logic.util.FileUtils;
+import com.example.ocr.ui.viewModel.FileViewModel;
 import com.example.ocr.ui.adapter.FileAdapter;
 import com.example.ocr.ui.viewModel.HomeViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -33,72 +33,57 @@ import java.util.Collections;
 import java.util.List;
 
 import cn.hutool.core.date.DateUtil;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class FileFragment extends Fragment {
+public class FileFragment extends Fragment implements View.OnClickListener {
 
 
-    private FragmentFileBinding mBinding;
+    private FragmentFileBinding binding;
     private static final String TAG = "FileFragment";
-    private Context mContext;
-    private FragmentActivity mActivity;
-    private HomeViewModel mViewModel;
-    private FileAdapter mAdapter;
+    private Context context;
+    private FragmentActivity activity;
+    private HomeViewModel homeViewModel;
+    private FileViewModel fileViewModel;
+    private FileAdapter adapter;
     private List<List<InvoiceData>> invoicesList;
+    private BottomSheetDialog dialog;
+    private TextView camera;
+    private TextView content;
+    private TextView cancel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mBinding = FragmentFileBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentFileBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mContext = requireContext();
-        mActivity = requireActivity();
-        mViewModel = new ViewModelProvider(mActivity).get(HomeViewModel.class);
+        context = requireContext();
+        activity = requireActivity();
+        homeViewModel = new ViewModelProvider(activity).get(HomeViewModel.class);
+        fileViewModel = new ViewModelProvider(activity).get(FileViewModel.class);
 
-        List<File> files = FileUtils.getExcelFileList();
-        mAdapter = new FileAdapter(files);
-        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mBinding.recyclerView.setAdapter(mAdapter);
-
-        BottomSheetDialog dialog = new BottomSheetDialog(mContext);
-        dialog.setContentView(R.layout.view_camera);
-        // 添加按钮
-        mBinding.floatingActionButton.setOnClickListener(v -> {
+        initView();
+        // 底部淡出菜单
+        binding.floatingActionButton.setOnClickListener(v -> {
             dialog.show();
         });
-        TextView camera = dialog.findViewById(R.id.camera);
-        TextView content = dialog.findViewById(R.id.content);
-        TextView cancel = dialog.findViewById(R.id.cancel);
-        // 选择图片
-        camera.setOnClickListener(v -> {
-            dialog.cancel();
-            Toast.makeText(mContext, "功能已关闭", Toast.LENGTH_SHORT).show();
-            // mViewModel.uriLauncherLaunch();
-        });
-        // 选择图片
-        content.setOnClickListener(v -> {
-            dialog.cancel();
-            invoicesList = new ArrayList<>();
-            mViewModel.contentLaunch2();
-            Toast.makeText(mContext, "content", Toast.LENGTH_SHORT).show();
-        });
-        // 选择图片
-        cancel.setOnClickListener(v -> {
-            dialog.cancel();
-        });
+        camera.setOnClickListener(this);
+        content.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+        // 文件列表
+        adapter = new FileAdapter(fileViewModel.getFileList());
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        binding.recyclerView.setAdapter(adapter);
         // 文件更新
-        mViewModel.getUri().observe(mActivity, uri -> {
-            Observable.create((Observable.OnSubscribe<List<InvoiceData>>) subscriber -> {
-                        subscriber.onNext(RetrofitUtils.getInvoices(uri));
-                    }).subscribeOn(Schedulers.io())
+        homeViewModel.getUriLiveData().observe(activity, uri -> {
+            fileViewModel.getUriObservable(uri)
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(invoiceData -> {
                         ArrayList<List<InvoiceData>> invoicesList = new ArrayList<>(Collections.singletonList(
@@ -106,21 +91,51 @@ public class FileFragment extends Fragment {
                         ));
                         String name = DateUtil.now() + ".xlsx";
                         ExcelUtils.create(invoicesList, name);
-                        mAdapter.add(new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
+                        adapter.add(new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
                     });
         });
 
-        mViewModel.getUrisLiveData().observe(mActivity, uris -> {
-            Observable.from(uris)
-                    .map(RetrofitUtils::getInvoices)
+        homeViewModel.getUriListLiveData().observe(activity, uris -> {
+            fileViewModel.getUriLsetObservable(uris)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(invoicesList::add, Throwable::printStackTrace, () -> {
                         String name = DateUtil.now() + ".xlsx";
                         ExcelUtils.create(invoicesList, name);
-                        mAdapter.add(new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
+                        adapter.add(new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name));
                     });
         });
     }
 
+    private void initView() {
+        dialog = new BottomSheetDialog(context);
+        dialog.setContentView(R.layout.view_camera);
+        camera = dialog.findViewById(R.id.camera);
+        content = dialog.findViewById(R.id.content);
+        cancel = dialog.findViewById(R.id.cancel);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.camera:
+                dialog.cancel();
+                Toast.makeText(context, "功能已关闭", Toast.LENGTH_SHORT).show();
+                // viewModel.cameraLaunch();
+                break;
+            case R.id.content:
+                dialog.cancel();
+                // 重置相册获取图片列表
+                invoicesList = new ArrayList<>();
+                Toast.makeText(context, "功能已关闭", Toast.LENGTH_SHORT).show();
+                // viewModel.contentLaunch();
+                break;
+            case R.id.cancel:
+                dialog.cancel();
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.example.ocr.logic.network;
 
-import static com.example.ocr.ui.activity.MainActivity.mContext;
+import static com.example.ocr.ui.activity.MainActivity.context;
 
 import android.net.Uri;
 import android.util.Log;
@@ -36,7 +36,7 @@ public class RetrofitUtils {
             if (invoice.getStatus() == 200) {
                 invoices = invoice.getData();
             } else {
-                Toast.makeText(mContext, "请选择正确的图片格式", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "请选择正确的图片格式", Toast.LENGTH_SHORT).show();
                 throw new Exception(invoice.toString());
             }
         } catch (Exception e) {

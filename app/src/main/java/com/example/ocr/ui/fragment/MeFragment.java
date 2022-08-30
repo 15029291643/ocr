@@ -17,22 +17,22 @@ import com.example.ocr.ui.viewModel.HomeViewModel;
 
 public  class MeFragment extends Fragment {
 
-    private FragmentMeBinding mBinding;
-    private HomeViewModel mViewModel;
+    private FragmentMeBinding binding;
+    private HomeViewModel viewModel;
     private static final String TAG = "PersonFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentMeBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentMeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        mViewModel.getUri().observe(requireActivity(), uri -> {
+        viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        viewModel.getUriLiveData().observe(requireActivity(), uri -> {
             // mBinding.personImg.setImageURI(uri);
         });
         // mBinding.personBtn.setOnClickListener(v -> mViewModel.contentLaunch());

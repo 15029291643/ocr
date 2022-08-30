@@ -5,6 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white2"
     tools:context=".ui.activity.HomeActivity"
     tools:openDrawer="start">
 
@@ -12,13 +13,14 @@
         android:id="@+id/include_content"
         layout="@layout/include_home_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/white2" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        app:headerLayout="@layout/include_home_header"
         android:layout_gravity="start"
+        app:headerLayout="@layout/include_home_header"
         app:menu="@menu/menu_home_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>
